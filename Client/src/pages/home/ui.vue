@@ -71,6 +71,18 @@
 <style scoped>
 	.intro-section {
 		padding: 0 2.4rem 6.8rem 2.4rem;
+
+		@media (width >= 1440px) {
+			padding: 0 16.5rem 0 16.5rem;
+			display: grid;
+			grid-template-columns: 52.5rem 54rem;
+			grid-template-rows: repeat(2, auto);
+			column-gap: 4.5rem;
+			align-content: center;
+			align-items: center;
+			justify-content: center;
+			height: 100%;
+		}
 	}
 
 	.intro-section__text-content {
@@ -84,6 +96,15 @@
 		width: 100%;
 		margin-left: auto;
 		margin-right: auto;
+
+		@media (width >= 1440px) {
+			grid-column: 1 / 2;
+			grid-row: 1 / -1;
+			padding-top: unset;
+			margin-bottom: unset;
+			row-gap: 2.2rem;
+			max-width: unset;
+		}
 	}
 
 	.intro-section__title {
@@ -94,6 +115,12 @@
 		letter-spacing: -0.01em;
 		text-align: center;
 		color: var(--white);
+
+		@media (width >= 1440px) {
+			font-size: 5rem;
+			line-height: 110%;
+			text-align: left;
+		}
 	}
 
 	.intro-section__text {
@@ -103,6 +130,10 @@
 		line-height: 162%;
 		text-align: center;
 		color: var(--white);
+
+		@media (width >= 1440px) {
+			text-align: left;
+		}
 	}
 
 	.intro-section__banner {
@@ -111,6 +142,14 @@
 		max-width: 52rem;
 		margin-left: auto;
 		margin-right: auto;
+
+		@media (width >= 1440px) {
+			grid-column: 2 / 3;
+			grid-row: 1 / 2;
+			max-width: unset;
+			margin-left: unset;
+			margin-right: unset;
+		}
 	}
 
 	.banner {
@@ -118,6 +157,10 @@
 		box-shadow: 0 0.8rem 0 0 rgba(0, 0, 0, 0.15);
 		background: var(--coronation-blue);
 		padding: 1.8rem 6.6rem;
+
+		@media (width >= 1440px) {
+			padding: 1.7rem 0;
+		}
 	}
 
 	.banner__text {
@@ -139,6 +182,14 @@
 		max-width: 52rem;
 		margin-left: auto;
 		margin-right: auto;
+
+		@media (width >= 1440px) {
+			grid-column: 2 / 3;
+			grid-row: 2 / 3;
+			max-width: unset;
+			margin-left: unset;
+			margin-right: unset;
+		}
 	}
 
 	.sign-up-form {
@@ -146,6 +197,10 @@
 		box-shadow: 0 0.8rem 0 0 rgba(0, 0, 0, 0.15);
 		background: var(--white);
 		padding: 2.4rem;
+
+		@media (width >= 1440px) {
+			padding: 4rem;
+		}
 	}
 
 	.sign-up-form__content {
@@ -153,6 +208,10 @@
 		flex-direction: column;
 		row-gap: 1.6rem;
 		margin-bottom: 0.8rem;
+
+		@media (width >= 1440px) {
+			row-gap: 2rem;
+		}
 	}
 
 	.sign-up-form__field {
@@ -173,6 +232,10 @@
 
 		&::placeholder {
 			opacity: 0.75;
+		}
+
+		@media (width >= 1440px) {
+			padding: 1.5rem 4.9rem 1.5rem 3.2rem;
 		}
 	}
 
@@ -210,6 +273,10 @@
 		> a {
 			font-weight: 700;
 			color: var(--pink-glamour);
+		}
+
+		@media (width >= 1440px) {
+			padding: unset;
 		}
 	}
 </style>
