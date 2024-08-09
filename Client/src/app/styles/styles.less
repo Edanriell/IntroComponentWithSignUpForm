@@ -7,6 +7,15 @@
 
 :root {
 	--font-family: "Poppins";
+
+	--white: hsl(0, 0%, 100%);
+	--coronation-blue: hsl(247, 32%, 49%);
+	--kingly-cloud: hsl(0, 0%, 87%);
+	--martinique: hsl(249, 10%, 26%);
+	--dark-shamrock: hsl(154, 59%, 51%);
+	--purple-heather: hsl(246, 25%, 77%);
+	--pink-glamour: hsl(0, 100%, 74%);
+	--embarrassment: hsl(0, 100%, 74%);
 }
 
 html {
@@ -18,11 +27,15 @@ html {
 body {
 	min-width: 32rem;
 	width: 100%;
-	background: #fff;
+	background: var(--embarrassment);
 }
 
 main {
-	height: 100vh;
+	height: 100%;
+
+	@media (width >= 1440px) {
+		height: 100vh;
+	}
 }
 
 .visually-hidden {
