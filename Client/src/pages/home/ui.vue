@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 	import { MainLayout } from "@widgets/layouts/main";
+	import { Banner } from "@shared/ui/banner";
 </script>
 
 <template>
@@ -12,9 +13,11 @@
 					great, but understanding how developers think is invaluable.
 				</p>
 			</div>
-			<div class="intro-section__banner banner">
-				<p class="banner__text"><strong>Try it free 7 days</strong> then $20/mo. thereafter</p>
-			</div>
+			<Banner
+				classes="intro-section__banner"
+				highlighted-text="Try it free 7 days"
+				text=" then $20/mo. thereafter"
+			/>
 			<form class="intro-section__sign-up-form sign-up-form" method="POST">
 				<div class="sign-up-form__content">
 					<div class="sign-up-form__field">
@@ -148,31 +151,6 @@
 			max-width: unset;
 			margin-left: unset;
 			margin-right: unset;
-		}
-	}
-
-	.banner {
-		border-radius: 1rem;
-		box-shadow: 0 0.8rem 0 0 rgba(0, 0, 0, 0.15);
-		background: var(--coronation-blue);
-		padding: 1.8rem 6.6rem;
-
-		@media (width >= 1440px) {
-			padding: 1.7rem 0;
-		}
-	}
-
-	.banner__text {
-		font-family: var(--font-family), sans-serif;
-		font-weight: 400;
-		font-size: 1.5rem;
-		line-height: 173%;
-		letter-spacing: 0.02em;
-		text-align: center;
-		color: var(--white);
-
-		> strong {
-			font-weight: 700;
 		}
 	}
 
