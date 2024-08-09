@@ -70,7 +70,7 @@
 
 <style scoped>
 	.intro-section {
-		padding: 0 2.4rem 6.8rem 2.4rem;
+		padding: 8.8rem 2.4rem 6.8rem 2.4rem;
 
 		@media (width >= 1440px) {
 			padding: 0 16.5rem 0 16.5rem;
@@ -86,7 +86,6 @@
 	}
 
 	.intro-section__text-content {
-		padding-top: 8.8rem;
 		margin-bottom: 6.4rem;
 		display: flex;
 		flex-direction: column;
