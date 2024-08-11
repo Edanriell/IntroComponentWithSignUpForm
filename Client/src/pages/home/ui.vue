@@ -2,10 +2,7 @@
 	import { MainLayout } from "@widgets/layouts/main";
 	import { Banner } from "@shared/ui/banner";
 	import { Button } from "@shared/ui/button";
-
-	const handleFormSubmit = (event) => {
-		event.preventDefault();
-	};
+	import { Input } from "@shared/ui/input";
 </script>
 
 <template>
@@ -23,52 +20,36 @@
 				highlighted-text="Try it free 7 days"
 				text=" then $20/mo. thereafter"
 			/>
-			<form
-				class="intro-section__sign-up-form sign-up-form"
-				method="POST"
-				@submit="handleFormSubmit"
-			>
+			<form class="intro-section__sign-up-form sign-up-form" method="POST">
 				<div class="sign-up-form__content">
-					<div class="sign-up-form__field">
-						<label class="visually-hidden" for="name">Name</label>
-						<input
-							id="name"
-							class="sign-up-form__input"
-							name="name"
-							placeholder="First Name"
-							type="text"
-						/>
-					</div>
-					<div class="sign-up-form__field">
-						<label class="visually-hidden" for="last-name">Last Name</label>
-						<input
-							id="last-name"
-							class="sign-up-form__input"
-							name="last-name"
-							placeholder="Last Name"
-							type="text"
-						/>
-					</div>
-					<div class="sign-up-form__field">
-						<label class="visually-hidden" for="email-address">Email Address</label>
-						<input
-							id="email-address"
-							class="sign-up-form__input"
-							name="email-address"
-							placeholder="Email Address"
-							type="email"
-						/>
-					</div>
-					<div class="sign-up-form__field">
-						<label class="visually-hidden" for="password">Password</label>
-						<input
-							id="password"
-							class="sign-up-form__input"
-							name="password"
-							placeholder="Password"
-							type="password"
-						/>
-					</div>
+					<Input
+						classes="sign-up-form__field"
+						description="Name"
+						name="name"
+						placeholder="First Name"
+						type="text"
+					/>
+					<Input
+						classes="sign-up-form__field"
+						description="Last Name"
+						name="last-name"
+						placeholder="Last Name"
+						type="text"
+					/>
+					<Input
+						classes="sign-up-form__field"
+						description="Email Address"
+						name="email-address"
+						placeholder="Email Address"
+						type="email"
+					/>
+					<Input
+						classes="sign-up-form__field"
+						description="Password"
+						name="password"
+						placeholder="Password"
+						type="password"
+					/>
 					<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 				</div>
 				<small class="sign-up-form__agreement"
@@ -202,27 +183,6 @@
 
 	.sign-up-form__field {
 		position: relative;
-	}
-
-	.sign-up-form__input {
-		border: 0.1rem solid var(--kingly-cloud);
-		border-radius: 0.5rem;
-		width: 100%;
-		padding: 1.5rem 4.9rem 1.5rem 1.941rem;
-		font-family: var(--font-family), sans-serif;
-		font-weight: 600;
-		font-size: 1.4rem;
-		line-height: 186%;
-		letter-spacing: 0.02em;
-		color: var(--martinique);
-
-		&::placeholder {
-			opacity: 0.75;
-		}
-
-		@media (width >= 1440px) {
-			padding: 1.5rem 4.9rem 1.5rem 3.2rem;
-		}
 	}
 
 	.sign-up-form__button {
