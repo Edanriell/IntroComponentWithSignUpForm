@@ -138,7 +138,7 @@
 				placeholder="First Name"
 				type="text"
 				@change="handleNameInputChange"
-			/>
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Last Name"
@@ -146,7 +146,7 @@
 				placeholder="Last Name"
 				type="text"
 				@change="handleSurnameInputChange"
-			/>
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Email Address"
@@ -154,7 +154,7 @@
 				placeholder="Email Address"
 				type="email"
 				@change="handleEmailInputChange"
-			/>
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Password"
@@ -162,7 +162,7 @@
 				placeholder="Password"
 				type="password"
 				@change="handlePasswordInputChange"
-			/>
+			></Input>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
 		<small class="sign-up-form__agreement"
