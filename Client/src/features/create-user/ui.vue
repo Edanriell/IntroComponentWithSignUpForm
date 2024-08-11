@@ -23,22 +23,22 @@
 	type FormState = {
 		nameInput: {
 			value: string;
-			isValid: boolean | null;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		surnameInput: {
 			value: string;
-			isValid: boolean | null;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		emailInput: {
 			value: string;
-			isValid: boolean | null;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		passwordInput: {
 			value: string;
-			isValid: boolean | null;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 	};
@@ -46,22 +46,22 @@
 	const formInitialState: FormState = {
 		nameInput: {
 			value: "",
-			isValid: null,
+			isValid: "idle",
 			errorMessage: null
 		},
 		surnameInput: {
 			value: "",
-			isValid: null,
+			isValid: "idle",
 			errorMessage: null
 		},
 		emailInput: {
 			value: "",
-			isValid: null,
+			isValid: "idle",
 			errorMessage: null
 		},
 		passwordInput: {
 			value: "",
-			isValid: null,
+			isValid: "idle",
 			errorMessage: null
 		}
 	};
@@ -125,7 +125,7 @@
 		console.log(formState);
 
 		for (const [_, { isValid }] of Object.entries(formState)) {
-			if (isValid === false) return;
+			if (isValid === "invalid" || isValid === "idle") return;
 		}
 	};
 </script>
@@ -142,12 +142,12 @@
 				@change="handleNameInputChange"
 			>
 				<Icon
-					v-if="isNameInputValid === false"
+					v-if="isNameInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isNameInputValid === false && nameInputErrorMessage!.length > 1"
+					v-if="isNameInputValid === 'invalid' && nameInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
 					{{ nameInputErrorMessage }}
@@ -162,12 +162,12 @@
 				@change="handleSurnameInputChange"
 			>
 				<Icon
-					v-if="isSurnameInputValid === false"
+					v-if="isSurnameInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isSurnameInputValid === false && surnameInputErrorMessage!.length > 1"
+					v-if="isSurnameInputValid === 'invalid' && surnameInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
 					{{ surnameInputErrorMessage }}
@@ -182,12 +182,12 @@
 				@change="handleEmailInputChange"
 			>
 				<Icon
-					v-if="isEmailInputValid === false"
+					v-if="isEmailInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isEmailInputValid === false && emailInputErrorMessage!.length > 1"
+					v-if="isEmailInputValid === 'invalid' && emailInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
 					{{ emailInputErrorMessage }}
@@ -202,12 +202,12 @@
 				@change="handlePasswordInputChange"
 			>
 				<Icon
-					v-if="isPasswordInputValid === false"
+					v-if="isPasswordInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isPasswordInputValid === false && passwordInputErrorMessage!.length > 1"
+					v-if="isPasswordInputValid === 'invalid' && passwordInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
 					{{ passwordInputErrorMessage }}
