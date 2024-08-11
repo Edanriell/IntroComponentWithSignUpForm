@@ -3,6 +3,12 @@
 
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
+	import {
+		validateEmailInput,
+		validateNameInput,
+		validatePasswordInput,
+		validateSurnameInput
+	} from "@features/create-user/model";
 
 	type Props = {
 		classes?: string;
@@ -77,18 +83,38 @@
 
 	const handleNameInputChange = (event: Event) => {
 		nameInputValue.value = (event.target as HTMLInputElement).value;
+		validateNameInput({
+			value: nameInputValue.value,
+			isValid: isNameInputValid,
+			errorMessage: nameInputErrorMessage
+		});
 	};
 
 	const handleSurnameInputChange = (event: Event) => {
 		surnameInputValue.value = (event.target as HTMLInputElement).value;
+		validateSurnameInput({
+			value: surnameInputValue.value,
+			isValid: isSurnameInputValid,
+			errorMessage: surnameInputErrorMessage
+		});
 	};
 
 	const handleEmailInputChange = (event: Event) => {
 		emailInputValue.value = (event.target as HTMLInputElement).value;
+		validateEmailInput({
+			value: emailInputValue.value,
+			isValid: isEmailInputValid,
+			errorMessage: emailInputErrorMessage
+		});
 	};
 
 	const handlePasswordInputChange = (event: Event) => {
 		passwordInputValue.value = (event.target as HTMLInputElement).value;
+		validatePasswordInput({
+			value: passwordInputValue.value,
+			isValid: isPasswordInputValid,
+			errorMessage: passwordInputErrorMessage
+		});
 	};
 
 	const handleCreateUserFormSubmit = (event: Event) => {

@@ -9,12 +9,12 @@ type ValidateFunctionParameters = {
 export const validateNameInput = ({ value, isValid, errorMessage }: ValidateFunctionParameters) => {
 	if (!value) {
 		isValid.value = false;
-		errorMessage.value = "Name is required";
+		errorMessage.value = "First Name cannot be empty";
 	}
 
 	if (!/^[a-zA-Z]+$/.test(value)) {
 		isValid.value = false;
-		errorMessage.value = "Name must contain only letters";
+		errorMessage.value = "First Name must contain only letters";
 	}
 
 	isValid.value = true;
@@ -28,12 +28,12 @@ export const validateSurnameInput = ({
 }: ValidateFunctionParameters) => {
 	if (!value) {
 		isValid.value = false;
-		errorMessage.value = "Surname is required";
+		errorMessage.value = "Last Name cannot be empty";
 	}
 
 	if (!/^[a-zA-Z]+$/.test(value)) {
 		isValid.value = false;
-		errorMessage.value = "Surname must contain only letters";
+		errorMessage.value = "Last Name must contain only letters";
 	}
 
 	isValid.value = true;
@@ -47,7 +47,7 @@ export const validateEmailInput = ({
 }: ValidateFunctionParameters) => {
 	if (!value) {
 		isValid.value = false;
-		errorMessage.value = "Email is required";
+		errorMessage.value = "Looks like this is not an email";
 	}
 
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -67,7 +67,7 @@ export const validatePasswordInput = ({
 }: ValidateFunctionParameters) => {
 	if (!value) {
 		isValid.value = false;
-		errorMessage.value = "Password is required";
+		errorMessage.value = "Password cannot be empty";
 	}
 
 	if (value.length < 8) {
