@@ -3,12 +3,14 @@
 
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
+	import { Icon } from "@shared/ui/icon";
+
 	import {
 		validateEmailInput,
 		validateNameInput,
 		validatePasswordInput,
 		validateSurnameInput
-	} from "@features/create-user/model";
+	} from "./model";
 
 	type Props = {
 		classes?: string;
@@ -138,7 +140,9 @@
 				placeholder="First Name"
 				type="text"
 				@change="handleNameInputChange"
-			></Input>
+			>
+				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+			</Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Last Name"
@@ -146,7 +150,9 @@
 				placeholder="Last Name"
 				type="text"
 				@change="handleSurnameInputChange"
-			></Input>
+			>
+				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+			</Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Email Address"
@@ -154,7 +160,9 @@
 				placeholder="Email Address"
 				type="email"
 				@change="handleEmailInputChange"
-			></Input>
+			>
+				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+			</Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Password"
@@ -162,7 +170,9 @@
 				placeholder="Password"
 				type="password"
 				@change="handlePasswordInputChange"
-			></Input>
+			>
+				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+			</Input>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
 		<small class="sign-up-form__agreement"
@@ -221,5 +231,12 @@
 		@media (width >= 1440px) {
 			padding: unset;
 		}
+	}
+
+	.sign-up-form__error-icon {
+		position: absolute;
+		top: 50%;
+		right: 2.7rem;
+		transform: translateY(-50%);
 	}
 </style>
