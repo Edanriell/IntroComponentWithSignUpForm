@@ -23,6 +23,7 @@
 			:type="props.type"
 			class="input"
 		/>
+		<slot />
 	</div>
 </template>
 

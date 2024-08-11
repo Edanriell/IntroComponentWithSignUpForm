@@ -1,6 +1,14 @@
 <script lang="ts" setup>
+	import { reactive, toRef } from "vue";
+
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
+	import {
+		validateEmailInput,
+		validateNameInput,
+		validatePasswordInput,
+		validateSurnameInput
+	} from "@features/create-user/model";
 
 	type Props = {
 		classes?: string;
@@ -10,8 +18,113 @@
 		classes: ""
 	});
 
+	type FormState = {
+		nameInput: {
+			value: string;
+			isValid: boolean;
+			errorMessage: string | null;
+		};
+		surnameInput: {
+			value: string;
+			isValid: boolean;
+			errorMessage: string | null;
+		};
+		emailInput: {
+			value: string;
+			isValid: boolean;
+			errorMessage: string | null;
+		};
+		passwordInput: {
+			value: string;
+			isValid: boolean;
+			errorMessage: string | null;
+		};
+	};
+
+	const formInitialState: FormState = {
+		nameInput: {
+			value: "",
+			isValid: false,
+			errorMessage: null
+		},
+		surnameInput: {
+			value: "",
+			isValid: false,
+			errorMessage: null
+		},
+		emailInput: {
+			value: "",
+			isValid: false,
+			errorMessage: null
+		},
+		passwordInput: {
+			value: "",
+			isValid: false,
+			errorMessage: null
+		}
+	};
+
+	const formState = reactive<FormState>(formInitialState);
+
+	const nameInputValue = toRef(formState.nameInput, "value");
+	const surnameInputValue = toRef(formState.surnameInput, "value");
+	const emailInputValue = toRef(formState.emailInput, "value");
+	const passwordInputValue = toRef(formState.passwordInput, "value");
+
+	const isNameInputValid = toRef(formState.nameInput, "isValid");
+	const isSurnameInputValid = toRef(formState.surnameInput, "isValid");
+	const isEmailInputValid = toRef(formState.emailInput, "isValid");
+	const isPasswordInputValid = toRef(formState.passwordInput, "isValid");
+
+	const nameInputErrorMessage = toRef(formState.nameInput, "errorMessage");
+	const surnameInputErrorMessage = toRef(formState.surnameInput, "errorMessage");
+	const emailInputErrorMessage = toRef(formState.emailInput, "errorMessage");
+	const passwordInputErrorMessage = toRef(formState.passwordInput, "errorMessage");
+
+	const handleNameInputChange = (event: Event) => {
+		nameInputValue.value = (event.target as HTMLInputElement).value;
+		validateNameInput({
+			value: nameInputValue.value,
+			isValid: isNameInputValid,
+			errorMessage: nameInputErrorMessage
+		});
+	};
+
+	const handleSurnameInputChange = (event: Event) => {
+		surnameInputValue.value = (event.target as HTMLInputElement).value;
+		validateSurnameInput({
+			value: surnameInputValue.value,
+			isValid: isSurnameInputValid,
+			errorMessage: surnameInputErrorMessage
+		});
+	};
+
+	const handleEmailInputChange = (event: Event) => {
+		emailInputValue.value = (event.target as HTMLInputElement).value;
+		validateEmailInput({
+			value: emailInputValue.value,
+			isValid: isEmailInputValid,
+			errorMessage: emailInputErrorMessage
+		});
+	};
+
+	const handlePasswordInputChange = (event: Event) => {
+		passwordInputValue.value = (event.target as HTMLInputElement).value;
+		validatePasswordInput({
+			value: passwordInputValue.value,
+			isValid: isPasswordInputValid,
+			errorMessage: passwordInputErrorMessage
+		});
+	};
+
 	const handleCreateUserFormSubmit = (event: Event) => {
 		event.preventDefault();
+
+		console.log(formState);
+
+		for (const [_, { isValid }] of Object.entries(formState)) {
+			if (isValid === false) return;
+		}
 	};
 </script>
 
@@ -24,28 +137,32 @@
 				name="name"
 				placeholder="First Name"
 				type="text"
-			/>
+				@change="handleNameInputChange"
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
 				type="text"
-			/>
+				@change="handleSurnameInputChange"
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
 				type="email"
-			/>
+				@change="handleEmailInputChange"
+			></Input>
 			<Input
 				classes="sign-up-form__field"
 				description="Password"
 				name="password"
 				placeholder="Password"
 				type="password"
-			/>
+				@change="handlePasswordInputChange"
+			></Input>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
 		<small class="sign-up-form__agreement"
