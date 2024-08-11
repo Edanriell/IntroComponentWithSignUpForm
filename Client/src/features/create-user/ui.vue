@@ -134,7 +134,10 @@
 	<form :class="props.classes + ' sign-up-form'" method="POST" @submit="handleCreateUserFormSubmit">
 		<div class="sign-up-form__content">
 			<Input
-				classes="sign-up-form__field"
+				:classes="[
+					'sign-up-form__field',
+					isNameInputValid === 'invalid' ? ' sign-up-form__field-error' : ''
+				]"
 				description="Name"
 				name="name"
 				placeholder="First Name"
@@ -154,7 +157,10 @@
 				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="[
+					'sign-up-form__field',
+					isSurnameInputValid === 'invalid' ? 'sign-up-form__field-error' : ''
+				]"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
@@ -174,7 +180,10 @@
 				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="[
+					'sign-up-form__field',
+					isEmailInputValid === 'invalid' ? 'sign-up-form__field-error' : ''
+				]"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
@@ -194,7 +203,10 @@
 				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="[
+					'sign-up-form__field',
+					isPasswordInputValid === 'invalid' ? ' sign-up-form__field-error' : ''
+				]"
 				description="Password"
 				name="password"
 				placeholder="Password"
@@ -247,6 +259,14 @@
 
 	.sign-up-form__field {
 		position: relative;
+	}
+
+	.sign-up-form__field-error {
+		margin-bottom: 1.8rem;
+
+		@media (width >= 1440px) {
+			margin-bottom: 2.2rem;
+		}
 	}
 
 	.sign-up-form__button {
