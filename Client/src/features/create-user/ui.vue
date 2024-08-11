@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+	import { reactive, toRef } from "vue";
+
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
 
@@ -10,8 +12,56 @@
 		classes: ""
 	});
 
+	const formState = reactive({
+		nameInput: {
+			value: "",
+			isValid: false,
+			errorMessage: ""
+		},
+		surnameInput: {
+			value: "",
+			isValid: false,
+			errorMessage: ""
+		},
+		emailInput: {
+			value: "",
+			isValid: false,
+			errorMessage: ""
+		},
+		passwordInput: {
+			value: "",
+			isValid: false,
+			errorMessage: ""
+		}
+	});
+
+	const nameInputValue = toRef(formState.nameInput, "value");
+	const surnameInputValue = toRef(formState.surnameInput, "value");
+	const emailInputValue = toRef(formState.emailInput, "value");
+	const passwordInputValue = toRef(formState.passwordInput, "value");
+
+	const handleNameInputChange = (event: Event) => {
+		nameInputValue.value = (event.target as HTMLInputElement).value;
+	};
+
+	const handleSurnameInputChange = (event: Event) => {
+		surnameInputValue.value = (event.target as HTMLInputElement).value;
+	};
+
+	const handleEmailInputChange = (event: Event) => {
+		emailInputValue.value = (event.target as HTMLInputElement).value;
+	};
+
+	const handlePasswordInputChange = (event: Event) => {
+		passwordInputValue.value = (event.target as HTMLInputElement).value;
+	};
+
 	const handleCreateUserFormSubmit = (event: Event) => {
 		event.preventDefault();
+
+		for (const [_, { isValid }] of Object.entries(formState)) {
+			if (isValid === false) return;
+		}
 	};
 </script>
 
@@ -24,6 +74,7 @@
 				name="name"
 				placeholder="First Name"
 				type="text"
+				@change="handleNameInputChange"
 			/>
 			<Input
 				classes="sign-up-form__field"
@@ -31,6 +82,7 @@
 				name="last-name"
 				placeholder="Last Name"
 				type="text"
+				@change="handleSurnameInputChange"
 			/>
 			<Input
 				classes="sign-up-form__field"
@@ -38,6 +90,7 @@
 				name="email-address"
 				placeholder="Email Address"
 				type="email"
+				@change="handleEmailInputChange"
 			/>
 			<Input
 				classes="sign-up-form__field"
@@ -45,6 +98,7 @@
 				name="password"
 				placeholder="Password"
 				type="password"
+				@change="handlePasswordInputChange"
 			/>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
