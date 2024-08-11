@@ -2,7 +2,7 @@ import type { Ref } from "vue";
 
 type ValidateFunctionParameters = {
 	value: string;
-	isValid: Ref<boolean>;
+	isValid: Ref<boolean | null>;
 	errorMessage: Ref<string | null>;
 };
 
@@ -10,11 +10,13 @@ export const validateNameInput = ({ value, isValid, errorMessage }: ValidateFunc
 	if (!value) {
 		isValid.value = false;
 		errorMessage.value = "First Name cannot be empty";
+		return;
 	}
 
 	if (!/^[a-zA-Z]+$/.test(value)) {
 		isValid.value = false;
 		errorMessage.value = "First Name must contain only letters";
+		return;
 	}
 
 	isValid.value = true;
@@ -29,11 +31,13 @@ export const validateSurnameInput = ({
 	if (!value) {
 		isValid.value = false;
 		errorMessage.value = "Last Name cannot be empty";
+		return;
 	}
 
 	if (!/^[a-zA-Z]+$/.test(value)) {
 		isValid.value = false;
 		errorMessage.value = "Last Name must contain only letters";
+		return;
 	}
 
 	isValid.value = true;
@@ -48,12 +52,14 @@ export const validateEmailInput = ({
 	if (!value) {
 		isValid.value = false;
 		errorMessage.value = "Looks like this is not an email";
+		return;
 	}
 
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	if (!emailRegex.test(value)) {
 		isValid.value = false;
 		errorMessage.value = "Invalid email format";
+		return;
 	}
 
 	isValid.value = true;
@@ -68,16 +74,19 @@ export const validatePasswordInput = ({
 	if (!value) {
 		isValid.value = false;
 		errorMessage.value = "Password cannot be empty";
+		return;
 	}
 
 	if (value.length < 8) {
 		isValid.value = false;
 		errorMessage.value = "Password must be at least 8 characters long";
+		return;
 	}
 
 	if (!/[a-zA-Z]/.test(value) || !/[0-9]/.test(value)) {
 		isValid.value = false;
 		errorMessage.value = "Password must contain letters and numbers";
+		return;
 	}
 
 	isValid.value = true;

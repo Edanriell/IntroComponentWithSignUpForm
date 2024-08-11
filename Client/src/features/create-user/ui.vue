@@ -23,22 +23,22 @@
 	type FormState = {
 		nameInput: {
 			value: string;
-			isValid: boolean;
+			isValid: boolean | null;
 			errorMessage: string | null;
 		};
 		surnameInput: {
 			value: string;
-			isValid: boolean;
+			isValid: boolean | null;
 			errorMessage: string | null;
 		};
 		emailInput: {
 			value: string;
-			isValid: boolean;
+			isValid: boolean | null;
 			errorMessage: string | null;
 		};
 		passwordInput: {
 			value: string;
-			isValid: boolean;
+			isValid: boolean | null;
 			errorMessage: string | null;
 		};
 	};
@@ -46,22 +46,22 @@
 	const formInitialState: FormState = {
 		nameInput: {
 			value: "",
-			isValid: false,
+			isValid: null,
 			errorMessage: null
 		},
 		surnameInput: {
 			value: "",
-			isValid: false,
+			isValid: null,
 			errorMessage: null
 		},
 		emailInput: {
 			value: "",
-			isValid: false,
+			isValid: null,
 			errorMessage: null
 		},
 		passwordInput: {
 			value: "",
-			isValid: false,
+			isValid: null,
 			errorMessage: null
 		}
 	};
@@ -141,7 +141,17 @@
 				type="text"
 				@change="handleNameInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isNameInputValid === false"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isNameInputValid === false && nameInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ nameInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
 				classes="sign-up-form__field"
@@ -151,7 +161,17 @@
 				type="text"
 				@change="handleSurnameInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isSurnameInputValid === false"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isSurnameInputValid === false && surnameInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ surnameInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
 				classes="sign-up-form__field"
@@ -161,7 +181,17 @@
 				type="email"
 				@change="handleEmailInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isEmailInputValid === false"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isEmailInputValid === false && emailInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ emailInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
 				classes="sign-up-form__field"
@@ -171,7 +201,17 @@
 				type="password"
 				@change="handlePasswordInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isPasswordInputValid === false"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isPasswordInputValid === false && passwordInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ passwordInputErrorMessage }}
+				</p>
 			</Input>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
@@ -238,5 +278,17 @@
 		top: 50%;
 		right: 2.7rem;
 		transform: translateY(-50%);
+	}
+
+	.sign-up-form__error-message {
+		position: absolute;
+		bottom: -1.8rem;
+		right: 0;
+		font-family: var(--font-family), sans-serif;
+		font-style: italic;
+		font-weight: 500;
+		font-size: 1.1rem;
+		text-align: right;
+		color: var(--pink-glamour);
 	}
 </style>
