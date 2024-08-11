@@ -2,6 +2,10 @@
 	import { MainLayout } from "@widgets/layouts/main";
 	import { Banner } from "@shared/ui/banner";
 	import { Button } from "@shared/ui/button";
+
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+	};
 </script>
 
 <template>
@@ -19,7 +23,11 @@
 				highlighted-text="Try it free 7 days"
 				text=" then $20/mo. thereafter"
 			/>
-			<form class="intro-section__sign-up-form sign-up-form" method="POST">
+			<form
+				class="intro-section__sign-up-form sign-up-form"
+				method="POST"
+				@submit="handleFormSubmit"
+			>
 				<div class="sign-up-form__content">
 					<div class="sign-up-form__field">
 						<label class="visually-hidden" for="name">Name</label>
