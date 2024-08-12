@@ -22,20 +22,23 @@ public class AccessRequestsEndpoints
 			return await userRepository.GetAllUsers();
 		}
 
-		private async Task<IResult> CreateNewUser([FromBody] CreateNewUserRequestDto request,
-												  IUserRepository                    userRepository)
+		private async Task<IResult> CreateNewUser(IUserRepository                    userRepository,
+												  [FromBody] CreateNewUserRequestDto request
+			)
 		{
 			return await userRepository.CreateNewUser(request);
 		}
 
-		private async Task<IResult> UpdateUser([FromBody] UpdateUserRequestDto request,
-											   IUserRepository                 userRepository)
+		private async Task<IResult> UpdateUser(IUserRepository                 userRepository,
+											   [FromBody] UpdateUserRequestDto request
+			)
 		{
 			return await userRepository.UpdateUser(request);
 		}
 
-		private async Task<IResult> DeleteUser([FromBody] DeleteUserRequestDto request,
-											   IUserRepository                 userRepository)
+		private async Task<IResult> DeleteUser(IUserRepository                 userRepository,
+											   [FromBody] DeleteUserRequestDto request
+			)
 		{
 			return await userRepository.DeleteUser(request);
 		}

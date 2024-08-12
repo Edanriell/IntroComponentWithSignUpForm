@@ -16,7 +16,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 		var recordCount = query.Count;
 
 		if (recordCount == 0)
-			return TypedResults.NotFound("No User Emails has been found.");
+			return TypedResults.NotFound("No Users has been found.");
 
 		return TypedResults.Ok(
 			new GetAllUsersResponseDto<User>
@@ -62,7 +62,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 
 		await context.SaveChangesAsync();
 
-		return TypedResults.Ok($"User {request.FirstName} {request.LastName} has been registered successfully.");
+		return TypedResults.Ok(
+			$"User {entity.FirstName} {entity.LastName} with Id {entity.Id} has been registered successfully.");
 	}
 
 	public async Task<IResult> UpdateUser(UpdateUserRequestDto request)
@@ -70,7 +71,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 		var entity = await context.Users.FindAsync(request.UserId);
 
 		if (entity is null)
-			return TypedResults.BadRequest($"User with Id: {request.UserId} is not found.");
+			return TypedResults.BadRequest($"User with Id: {request.UserId} was not found.");
 
 		if (!string.IsNullOrWhiteSpace(request.FirstName))
 			entity.FirstName = request.FirstName;
@@ -96,7 +97,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
 		var entity = await context.Users.FindAsync(request.UserId);
 
 		if (entity is null)
-			return TypedResults.BadRequest($"User with Id: {request.UserId} is not found.");
+			return TypedResults.BadRequest($"User with Id: {request.UserId} was not found.");
 
 		context.Users.Remove(entity);
 
