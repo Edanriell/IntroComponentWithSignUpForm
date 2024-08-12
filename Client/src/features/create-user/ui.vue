@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-	import { reactive, toRef } from "vue";
+	import { computed, reactive, toRef } from "vue";
 
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
@@ -23,22 +23,22 @@
 	type FormState = {
 		nameInput: {
 			value: string;
-			isValid: boolean;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		surnameInput: {
 			value: string;
-			isValid: boolean;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		emailInput: {
 			value: string;
-			isValid: boolean;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 		passwordInput: {
 			value: string;
-			isValid: boolean;
+			isValid: "invalid" | "valid" | "idle";
 			errorMessage: string | null;
 		};
 	};
@@ -46,22 +46,22 @@
 	const formInitialState: FormState = {
 		nameInput: {
 			value: "",
-			isValid: false,
+			isValid: "idle",
 			errorMessage: null
 		},
 		surnameInput: {
 			value: "",
-			isValid: false,
+			isValid: "idle",
 			errorMessage: null
 		},
 		emailInput: {
 			value: "",
-			isValid: false,
+			isValid: "idle",
 			errorMessage: null
 		},
 		passwordInput: {
 			value: "",
-			isValid: false,
+			isValid: "idle",
 			errorMessage: null
 		}
 	};
@@ -125,53 +125,113 @@
 		console.log(formState);
 
 		for (const [_, { isValid }] of Object.entries(formState)) {
-			if (isValid === false) return;
+			if (isValid === "invalid" || isValid === "idle") return;
 		}
 	};
+
+	const nameInputClasses = computed(() => ({
+		"sign-up-form__field-error": isNameInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const surnameInputClasses = computed(() => ({
+		"sign-up-form__field-error": isSurnameInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const emailInputClasses = computed(() => ({
+		"sign-up-form__field-error": isEmailInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const passwordInputClasses = computed(() => ({
+		"sign-up-form__field-error": isPasswordInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
 </script>
 
 <template>
 	<form :class="props.classes + ' sign-up-form'" method="POST" @submit="handleCreateUserFormSubmit">
 		<div class="sign-up-form__content">
 			<Input
-				classes="sign-up-form__field"
+				:classes="nameInputClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
 				type="text"
 				@change="handleNameInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isNameInputValid === 'invalid'"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isNameInputValid === 'invalid' && nameInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ nameInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="surnameInputClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
 				type="text"
 				@change="handleSurnameInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isSurnameInputValid === 'invalid'"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isSurnameInputValid === 'invalid' && surnameInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ surnameInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="emailInputClasses"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
 				type="email"
 				@change="handleEmailInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isEmailInputValid === 'invalid'"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isEmailInputValid === 'invalid' && emailInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ emailInputErrorMessage }}
+				</p>
 			</Input>
 			<Input
-				classes="sign-up-form__field"
+				:classes="passwordInputClasses"
 				description="Password"
 				name="password"
 				placeholder="Password"
 				type="password"
 				@change="handlePasswordInputChange"
 			>
-				<Icon classes="sign-up-form__error-icon" icon-type="error" />
+				<Icon
+					v-if="isPasswordInputValid === 'invalid'"
+					classes="sign-up-form__error-icon"
+					icon-type="error"
+				/>
+				<p
+					v-if="isPasswordInputValid === 'invalid' && passwordInputErrorMessage!.length > 1"
+					class="sign-up-form__error-message"
+				>
+					{{ passwordInputErrorMessage }}
+				</p>
 			</Input>
 			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
 		</div>
@@ -209,6 +269,14 @@
 		position: relative;
 	}
 
+	.sign-up-form__field-error {
+		margin-bottom: 1.8rem;
+
+		@media (width >= 1440px) {
+			margin-bottom: 2.2rem;
+		}
+	}
+
 	.sign-up-form__button {
 		position: relative;
 	}
@@ -238,5 +306,17 @@
 		top: 50%;
 		right: 2.7rem;
 		transform: translateY(-50%);
+	}
+
+	.sign-up-form__error-message {
+		position: absolute;
+		bottom: -1.8rem;
+		right: 0;
+		font-family: var(--font-family), sans-serif;
+		font-style: italic;
+		font-weight: 500;
+		font-size: 1.1rem;
+		text-align: right;
+		color: var(--pink-glamour);
 	}
 </style>
