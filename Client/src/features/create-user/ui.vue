@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-	import { reactive, toRef } from "vue";
+	import { computed, reactive, toRef } from "vue";
 
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
@@ -128,16 +128,33 @@
 			if (isValid === "invalid" || isValid === "idle") return;
 		}
 	};
+
+	const nameInputClasses = computed(() => ({
+		"sign-up-form__field-error": isNameInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const surnameInputClasses = computed(() => ({
+		"sign-up-form__field-error": isSurnameInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const emailInputClasses = computed(() => ({
+		"sign-up-form__field-error": isEmailInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
+
+	const passwordInputClasses = computed(() => ({
+		"sign-up-form__field-error": isPasswordInputValid.value === "invalid",
+		"sign-up-form__field": true
+	}));
 </script>
 
 <template>
 	<form :class="props.classes + ' sign-up-form'" method="POST" @submit="handleCreateUserFormSubmit">
 		<div class="sign-up-form__content">
 			<Input
-				:classes="[
-					'sign-up-form__field',
-					isNameInputValid === 'invalid' ? ' sign-up-form__field-error' : ''
-				]"
+				:classes="nameInputClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
@@ -157,10 +174,7 @@
 				</p>
 			</Input>
 			<Input
-				:classes="[
-					'sign-up-form__field',
-					isSurnameInputValid === 'invalid' ? 'sign-up-form__field-error' : ''
-				]"
+				:classes="surnameInputClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
@@ -180,10 +194,7 @@
 				</p>
 			</Input>
 			<Input
-				:classes="[
-					'sign-up-form__field',
-					isEmailInputValid === 'invalid' ? 'sign-up-form__field-error' : ''
-				]"
+				:classes="emailInputClasses"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
@@ -203,10 +214,7 @@
 				</p>
 			</Input>
 			<Input
-				:classes="[
-					'sign-up-form__field',
-					isPasswordInputValid === 'invalid' ? ' sign-up-form__field-error' : ''
-				]"
+				:classes="passwordInputClasses"
 				description="Password"
 				name="password"
 				placeholder="Password"

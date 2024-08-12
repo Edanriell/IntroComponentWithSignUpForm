@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 	type Props = {
-		classes?: string | string[];
+		classes?: any;
 		name: string;
 		description: string;
 		placeholder: string;
@@ -11,13 +11,10 @@
 		classes: "",
 		type: "text"
 	});
-
-	const computedClasses = Array.isArray(props.classes) ? props.classes?.join(" ") : props.classes;
-	console.log(computedClasses);
 </script>
 
 <template>
-	<div :class="computedClasses">
+	<div :class="props.classes">
 		<label :for="props.name" class="visually-hidden">{{ props.description }}</label>
 		<input
 			:id="props.name"
