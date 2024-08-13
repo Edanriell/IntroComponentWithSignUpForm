@@ -131,24 +131,34 @@
 		}
 	};
 
-	const nameInputClasses = computed(() => ({
+	const nameInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isNameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const surnameInputClasses = computed(() => ({
+	const surnameInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isSurnameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const emailInputClasses = computed(() => ({
+	const emailInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isEmailInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const passwordInputClasses = computed(() => ({
+	const passwordInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isPasswordInputValid.value === "invalid",
 		"sign-up-form__field": true
+	}));
+
+	const nameInputClasses = computed(() => ({
+		"sign-up-form__input-error": isNameInputValid.value === "invalid"
+	}));
+	const surnameInputClasses = computed(() => ({
+		"sign-up-form__input-error": isSurnameInputValid.value === "invalid"
+	}));
+	const emailInputClasses = computed(() => ({
+		"sign-up-form__input-error": isEmailInputValid.value === "invalid"
+	}));
+	const passwordInputClasses = computed(() => ({
+		"sign-up-form__input-error": isPasswordInputValid.value === "invalid"
 	}));
 </script>
 
@@ -157,6 +167,7 @@
 		<div class="sign-up-form__content">
 			<Input
 				:classes="nameInputClasses"
+				:fieldClasses="nameInputFieldClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
@@ -177,6 +188,7 @@
 			</Input>
 			<Input
 				:classes="surnameInputClasses"
+				:fieldClasses="surnameInputFieldClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
@@ -197,6 +209,7 @@
 			</Input>
 			<Input
 				:classes="emailInputClasses"
+				:fieldClasses="emailInputFieldClasses"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
@@ -217,6 +230,7 @@
 			</Input>
 			<Input
 				:classes="passwordInputClasses"
+				:fieldClasses="passwordInputFieldClasses"
 				description="Password"
 				name="password"
 				placeholder="Password"
@@ -287,6 +301,15 @@
 
 		@media (width >= 1440px) {
 			margin-bottom: 2.2rem;
+		}
+	}
+
+	.sign-up-form__input-error {
+		outline: var(--pink-glamour) solid 0.2rem !important;
+		background: mediumvioletred;
+
+		&:focus {
+			outline: var(--pink-glamour) solid 0.2rem !important;
 		}
 	}
 

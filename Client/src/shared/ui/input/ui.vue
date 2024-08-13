@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 	type Props = {
 		classes?: any;
+		fieldClasses?: any;
 		name: string;
 		description: string;
 		placeholder: string;
@@ -9,19 +10,20 @@
 
 	const props = withDefaults(defineProps<Props>(), {
 		classes: "",
+		fieldClasses: "",
 		type: "text"
 	});
 </script>
 
 <template>
-	<div :class="props.classes">
+	<div :class="props.fieldClasses">
 		<label :for="props.name" class="visually-hidden">{{ props.description }}</label>
 		<input
 			:id="props.name"
+			:class="props.classes + ' input'"
 			:name="props.name"
 			:placeholder="props.placeholder"
 			:type="props.type"
-			class="input"
 		/>
 		<slot />
 	</div>
@@ -39,6 +41,10 @@
 		line-height: 186%;
 		letter-spacing: 0.02em;
 		color: var(--martinique);
+
+		&:focus {
+			outline: var(--coronation-blue) solid 0.1rem;
+		}
 
 		&::placeholder {
 			opacity: 0.75;
