@@ -4,7 +4,6 @@
 	type Props = {
 		classes?: string;
 		type?: "button" | "submit" | "reset";
-		text: string;
 	};
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -83,7 +82,7 @@
 		@touchend="handleButtonTouchEnd"
 		@touchstart="handleButtonTouchStart"
 	>
-		{{ props.text }}
+		<slot />
 	</button>
 </template>
 

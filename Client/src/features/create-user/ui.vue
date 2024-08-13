@@ -11,6 +11,7 @@
 		validatePasswordInput,
 		validateSurnameInput
 	} from "./model";
+	import { Spinner } from "@shared/ui/spinner";
 
 	type Props = {
 		classes?: string;
@@ -20,26 +21,20 @@
 		classes: ""
 	});
 
+	type FormInputState = {
+		value: string;
+		isValid: "invalid" | "valid" | "idle";
+		errorMessage: string | null;
+	};
+
 	type FormState = {
-		nameInput: {
-			value: string;
+		nameInput: FormInputState;
+		surnameInput: FormInputState;
+		emailInput: FormInputState;
+		passwordInput: FormInputState;
+		form: {
 			isValid: "invalid" | "valid" | "idle";
-			errorMessage: string | null;
-		};
-		surnameInput: {
-			value: string;
-			isValid: "invalid" | "valid" | "idle";
-			errorMessage: string | null;
-		};
-		emailInput: {
-			value: string;
-			isValid: "invalid" | "valid" | "idle";
-			errorMessage: string | null;
-		};
-		passwordInput: {
-			value: string;
-			isValid: "invalid" | "valid" | "idle";
-			errorMessage: string | null;
+			isSubmitting: "submitting" | "submitted" | "idle";
 		};
 	};
 
@@ -63,6 +58,10 @@
 			value: "",
 			isValid: "idle",
 			errorMessage: null
+		},
+		form: {
+			isSubmitting: "idle",
+			isValid: "idle"
 		}
 	};
 
@@ -82,6 +81,9 @@
 	const surnameInputErrorMessage = toRef(formState.surnameInput, "errorMessage");
 	const emailInputErrorMessage = toRef(formState.emailInput, "errorMessage");
 	const passwordInputErrorMessage = toRef(formState.passwordInput, "errorMessage");
+
+	const isFormSubmitting = toRef(formState.form, "isSubmitting");
+	const isFormValid = toRef(formState.form, "isValid");
 
 	const handleNameInputChange = (event: Event) => {
 		nameInputValue.value = (event.target as HTMLInputElement).value;
@@ -233,7 +235,18 @@
 					{{ passwordInputErrorMessage }}
 				</p>
 			</Input>
-			<Button classes="sign-up-form__button" text="Claim your free trial" type="submit" />
+			<Button :disabled="!isFormValid" classes="sign-up-form__button" type="submit">
+				<p
+					v-if="isFormSubmitting === 'idle' || isFormSubmitting === 'submitted'"
+					class="sign-up-form__button-text"
+				>
+					Claim your free trial
+				</p>
+				<div v-else-if="isFormSubmitting === 'submitting'" class="sign-up-form__button-sending">
+					<p class="sign-up-form__button-text">Sending data</p>
+					<Spinner />
+				</div>
+			</Button>
 		</div>
 		<small class="sign-up-form__agreement"
 			>By clicking the button, you are agreeing to our
@@ -279,6 +292,19 @@
 
 	.sign-up-form__button {
 		position: relative;
+	}
+
+	.sign-up-form__button-text {
+		background-color: transparent;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.sign-up-form__button-sending {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		column-gap: 1.4rem;
 	}
 
 	.sign-up-form__agreement {
