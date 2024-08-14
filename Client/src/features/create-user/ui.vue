@@ -131,24 +131,38 @@
 		}
 	};
 
-	const nameInputClasses = computed(() => ({
+	const nameInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isNameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const surnameInputClasses = computed(() => ({
+	const surnameInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isSurnameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const emailInputClasses = computed(() => ({
+	const emailInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isEmailInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-
-	const passwordInputClasses = computed(() => ({
+	const passwordInputFieldClasses = computed(() => ({
 		"sign-up-form__field-error": isPasswordInputValid.value === "invalid",
 		"sign-up-form__field": true
+	}));
+
+	const nameInputClasses = computed(() => ({
+		"input-error": isNameInputValid.value === "invalid",
+		input: true
+	}));
+	const surnameInputClasses = computed(() => ({
+		"input-error": isSurnameInputValid.value === "invalid",
+		input: true
+	}));
+	const emailInputClasses = computed(() => ({
+		"input-error": isEmailInputValid.value === "invalid",
+		input: true
+	}));
+	const passwordInputClasses = computed(() => ({
+		"input-error": isPasswordInputValid.value === "invalid",
+		input: true
 	}));
 </script>
 
@@ -157,6 +171,7 @@
 		<div class="sign-up-form__content">
 			<Input
 				:classes="nameInputClasses"
+				:field-classes="nameInputFieldClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
@@ -177,6 +192,7 @@
 			</Input>
 			<Input
 				:classes="surnameInputClasses"
+				:field-classes="surnameInputFieldClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
@@ -197,6 +213,7 @@
 			</Input>
 			<Input
 				:classes="emailInputClasses"
+				:field-classes="emailInputFieldClasses"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
@@ -217,6 +234,7 @@
 			</Input>
 			<Input
 				:classes="passwordInputClasses"
+				:field-classes="passwordInputFieldClasses"
 				description="Password"
 				name="password"
 				placeholder="Password"
