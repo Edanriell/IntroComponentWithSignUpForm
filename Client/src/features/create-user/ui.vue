@@ -4,14 +4,15 @@
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
 	import { Icon } from "@shared/ui/icon";
+	import { Spinner } from "@shared/ui/spinner";
 
+	import { formInitialState, type FormState } from "./model/store";
 	import {
 		validateEmailInput,
-		validateNameInput,
-		validatePasswordInput,
-		validateSurnameInput
-	} from "./model";
-	import { Spinner } from "@shared/ui/spinner";
+		validateFirstNameInput,
+		validateLastNameInput,
+		validatePasswordInput
+	} from "./model/validation";
 
 	type Props = {
 		classes?: string;
@@ -21,85 +22,41 @@
 		classes: ""
 	});
 
-	type FormInputState = {
-		value: string;
-		isValid: "invalid" | "valid" | "idle";
-		errorMessage: string | null;
-	};
-
-	type FormState = {
-		nameInput: FormInputState;
-		surnameInput: FormInputState;
-		emailInput: FormInputState;
-		passwordInput: FormInputState;
-		form: {
-			isValid: "invalid" | "valid" | "idle";
-			isSubmitting: "submitting" | "submitted" | "idle";
-		};
-	};
-
-	const formInitialState: FormState = {
-		nameInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		surnameInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		emailInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		passwordInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		form: {
-			isSubmitting: "idle",
-			isValid: "idle"
-		}
-	};
-
 	const formState = reactive<FormState>(formInitialState);
 
-	const nameInputValue = toRef(formState.nameInput, "value");
-	const surnameInputValue = toRef(formState.surnameInput, "value");
+	const firstNameInputValue = toRef(formState.firstNameInput, "value");
+	const lastNameInputValue = toRef(formState.lastNameInput, "value");
 	const emailInputValue = toRef(formState.emailInput, "value");
 	const passwordInputValue = toRef(formState.passwordInput, "value");
 
-	const isNameInputValid = toRef(formState.nameInput, "isValid");
-	const isSurnameInputValid = toRef(formState.surnameInput, "isValid");
+	const isFirstNameInputValid = toRef(formState.firstNameInput, "isValid");
+	const isLastNameInputValid = toRef(formState.lastNameInput, "isValid");
 	const isEmailInputValid = toRef(formState.emailInput, "isValid");
 	const isPasswordInputValid = toRef(formState.passwordInput, "isValid");
 
-	const nameInputErrorMessage = toRef(formState.nameInput, "errorMessage");
-	const surnameInputErrorMessage = toRef(formState.surnameInput, "errorMessage");
+	const firstNameInputErrorMessage = toRef(formState.firstNameInput, "errorMessage");
+	const lastNameInputErrorMessage = toRef(formState.lastNameInput, "errorMessage");
 	const emailInputErrorMessage = toRef(formState.emailInput, "errorMessage");
 	const passwordInputErrorMessage = toRef(formState.passwordInput, "errorMessage");
 
 	const isFormSubmitting = toRef(formState.form, "isSubmitting");
 	const isFormValid = toRef(formState.form, "isValid");
 
-	const handleNameInputChange = (event: Event) => {
-		nameInputValue.value = (event.target as HTMLInputElement).value;
-		validateNameInput({
-			value: nameInputValue.value,
-			isValid: isNameInputValid,
-			errorMessage: nameInputErrorMessage
+	const handleFirstNameInputChange = (event: Event) => {
+		firstNameInputValue.value = (event.target as HTMLInputElement).value;
+		validateFirstNameInput({
+			value: firstNameInputValue.value,
+			isValid: isFirstNameInputValid,
+			errorMessage: firstNameInputErrorMessage
 		});
 	};
 
-	const handleSurnameInputChange = (event: Event) => {
-		surnameInputValue.value = (event.target as HTMLInputElement).value;
-		validateSurnameInput({
-			value: surnameInputValue.value,
-			isValid: isSurnameInputValid,
-			errorMessage: surnameInputErrorMessage
+	const handleLastNameInputChange = (event: Event) => {
+		lastNameInputValue.value = (event.target as HTMLInputElement).value;
+		validateLastNameInput({
+			value: lastNameInputValue.value,
+			isValid: isLastNameInputValid,
+			errorMessage: lastNameInputErrorMessage
 		});
 	};
 
@@ -131,12 +88,12 @@
 		}
 	};
 
-	const nameInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isNameInputValid.value === "invalid",
+	const firstNameInputFieldClasses = computed(() => ({
+		"sign-up-form__field-error": isFirstNameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
-	const surnameInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isSurnameInputValid.value === "invalid",
+	const lastNameInputFieldClasses = computed(() => ({
+		"sign-up-form__field-error": isLastNameInputValid.value === "invalid",
 		"sign-up-form__field": true
 	}));
 	const emailInputFieldClasses = computed(() => ({
@@ -148,12 +105,12 @@
 		"sign-up-form__field": true
 	}));
 
-	const nameInputClasses = computed(() => ({
-		"input-error": isNameInputValid.value === "invalid",
+	const firstNameInputClasses = computed(() => ({
+		"input-error": isFirstNameInputValid.value === "invalid",
 		input: true
 	}));
-	const surnameInputClasses = computed(() => ({
-		"input-error": isSurnameInputValid.value === "invalid",
+	const lastNameInputClasses = computed(() => ({
+		"input-error": isLastNameInputValid.value === "invalid",
 		input: true
 	}));
 	const emailInputClasses = computed(() => ({
@@ -170,45 +127,45 @@
 	<form :class="props.classes + ' sign-up-form'" method="POST" @submit="handleCreateUserFormSubmit">
 		<div class="sign-up-form__content">
 			<Input
-				:classes="nameInputClasses"
-				:field-classes="nameInputFieldClasses"
+				:classes="firstNameInputClasses"
+				:field-classes="firstNameInputFieldClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
 				type="text"
-				@change="handleNameInputChange"
+				@change="handleFirstNameInputChange"
 			>
 				<Icon
-					v-if="isNameInputValid === 'invalid'"
+					v-if="isFirstNameInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isNameInputValid === 'invalid' && nameInputErrorMessage!.length > 1"
+					v-if="isFirstNameInputValid === 'invalid' && firstNameInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ nameInputErrorMessage }}
+					{{ firstNameInputErrorMessage }}
 				</p>
 			</Input>
 			<Input
-				:classes="surnameInputClasses"
-				:field-classes="surnameInputFieldClasses"
+				:classes="lastNameInputClasses"
+				:field-classes="lastNameInputFieldClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
 				type="text"
-				@change="handleSurnameInputChange"
+				@change="handleLastNameInputChange"
 			>
 				<Icon
-					v-if="isSurnameInputValid === 'invalid'"
+					v-if="isLastNameInputValid === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isSurnameInputValid === 'invalid' && surnameInputErrorMessage!.length > 1"
+					v-if="isLastNameInputValid === 'invalid' && lastNameInputErrorMessage!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ surnameInputErrorMessage }}
+					{{ lastNameInputErrorMessage }}
 				</p>
 			</Input>
 			<Input
