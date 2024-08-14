@@ -1,4 +1,4 @@
-import type { Ref } from "../../../../vue-spinners";
+import type { Ref } from "vue";
 
 type ValidateFunctionParameters = {
 	value: string;
@@ -6,7 +6,11 @@ type ValidateFunctionParameters = {
 	errorMessage: Ref<string | null>;
 };
 
-export const validateNameInput = ({ value, isValid, errorMessage }: ValidateFunctionParameters) => {
+export const validateFirstNameInput = ({
+	value,
+	isValid,
+	errorMessage
+}: ValidateFunctionParameters) => {
 	if (!value) {
 		isValid.value = "invalid";
 		errorMessage.value = "First Name cannot be empty";
@@ -23,7 +27,7 @@ export const validateNameInput = ({ value, isValid, errorMessage }: ValidateFunc
 	errorMessage.value = null;
 };
 
-export const validateSurnameInput = ({
+export const validateLastNameInput = ({
 	value,
 	isValid,
 	errorMessage
