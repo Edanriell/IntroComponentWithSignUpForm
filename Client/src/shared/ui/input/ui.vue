@@ -20,7 +20,7 @@
 		<label :for="props.name" class="visually-hidden">{{ props.description }}</label>
 		<input
 			:id="props.name"
-			:class="props.classes + ' input'"
+			:class="props.classes"
 			:name="props.name"
 			:placeholder="props.placeholder"
 			:type="props.type"
@@ -43,7 +43,8 @@
 		color: var(--martinique);
 
 		&:focus {
-			outline: var(--coronation-blue) solid 0.1rem;
+			border: var(--coronation-blue) solid 0.1rem;
+			outline: none;
 		}
 
 		&::placeholder {
@@ -52,6 +53,14 @@
 
 		@media (width >= 1440px) {
 			padding: 1.5rem 4.9rem 1.5rem 3.2rem;
+		}
+	}
+
+	.input-error {
+		border: var(--pink-glamour) solid 0.2rem !important;
+
+		&:focus {
+			border: var(--pink-glamour) solid 0.2rem !important;
 		}
 	}
 </style>

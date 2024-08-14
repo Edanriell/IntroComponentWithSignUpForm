@@ -149,16 +149,20 @@
 	}));
 
 	const nameInputClasses = computed(() => ({
-		"sign-up-form__input-error": isNameInputValid.value === "invalid"
+		"input-error": isNameInputValid.value === "invalid",
+		input: true
 	}));
 	const surnameInputClasses = computed(() => ({
-		"sign-up-form__input-error": isSurnameInputValid.value === "invalid"
+		"input-error": isSurnameInputValid.value === "invalid",
+		input: true
 	}));
 	const emailInputClasses = computed(() => ({
-		"sign-up-form__input-error": isEmailInputValid.value === "invalid"
+		"input-error": isEmailInputValid.value === "invalid",
+		input: true
 	}));
 	const passwordInputClasses = computed(() => ({
-		"sign-up-form__input-error": isPasswordInputValid.value === "invalid"
+		"input-error": isPasswordInputValid.value === "invalid",
+		input: true
 	}));
 </script>
 
@@ -167,7 +171,7 @@
 		<div class="sign-up-form__content">
 			<Input
 				:classes="nameInputClasses"
-				:fieldClasses="nameInputFieldClasses"
+				:field-classes="nameInputFieldClasses"
 				description="Name"
 				name="name"
 				placeholder="First Name"
@@ -188,7 +192,7 @@
 			</Input>
 			<Input
 				:classes="surnameInputClasses"
-				:fieldClasses="surnameInputFieldClasses"
+				:field-classes="surnameInputFieldClasses"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
@@ -209,7 +213,7 @@
 			</Input>
 			<Input
 				:classes="emailInputClasses"
-				:fieldClasses="emailInputFieldClasses"
+				:field-classes="emailInputFieldClasses"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
@@ -230,7 +234,7 @@
 			</Input>
 			<Input
 				:classes="passwordInputClasses"
-				:fieldClasses="passwordInputFieldClasses"
+				:field-classes="passwordInputFieldClasses"
 				description="Password"
 				name="password"
 				placeholder="Password"
@@ -301,15 +305,6 @@
 
 		@media (width >= 1440px) {
 			margin-bottom: 2.2rem;
-		}
-	}
-
-	.sign-up-form__input-error {
-		outline: var(--pink-glamour) solid 0.2rem !important;
-		background: mediumvioletred;
-
-		&:focus {
-			outline: var(--pink-glamour) solid 0.2rem !important;
 		}
 	}
 
