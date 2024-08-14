@@ -81,11 +81,12 @@
 	const handleCreateUserFormSubmit = (event: Event) => {
 		event.preventDefault();
 
-		console.log(formState);
-
 		for (const [_, { isValid }] of Object.entries(formState)) {
 			if (isValid === "invalid" || isValid === "idle") return;
 		}
+
+		try {
+		} catch (error) {}
 	};
 
 	const firstNameInputFieldClasses = computed(() => ({
