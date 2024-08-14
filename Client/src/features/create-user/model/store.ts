@@ -11,7 +11,9 @@ export type FormState = {
 	passwordInput: FormInputState;
 	form: {
 		isValid: "invalid" | "valid" | "idle";
-		isSubmitting: "submitting" | "submitted" | "idle";
+		isSubmitting: "submitting" | "submitted" | "unsubmitted" | "idle";
+		errorMessage: string | null;
+		successMessage: string | null;
 	};
 };
 
@@ -38,6 +40,8 @@ export const formInitialState: FormState = {
 	},
 	form: {
 		isSubmitting: "idle",
-		isValid: "idle"
+		isValid: "idle",
+		errorMessage: null,
+		successMessage: null
 	}
 };

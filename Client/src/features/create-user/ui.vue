@@ -13,6 +13,7 @@
 		validateLastNameInput,
 		validatePasswordInput
 	} from "./model/validation";
+	import { createUser } from "@entities/user/api";
 
 	type Props = {
 		classes?: string;
@@ -41,6 +42,8 @@
 
 	const isFormSubmitting = toRef(formState.form, "isSubmitting");
 	const isFormValid = toRef(formState.form, "isValid");
+	const formErrorMessage = toRef(formState.form, "errorMessage");
+	const formSuccessMessage = toRef(formState.form, "successMessage");
 
 	const handleFirstNameInputChange = (event: Event) => {
 		firstNameInputValue.value = (event.target as HTMLInputElement).value;
@@ -78,15 +81,44 @@
 		});
 	};
 
-	const handleCreateUserFormSubmit = (event: Event) => {
+	const handleCreateUserFormSubmit = async (event: Event) => {
 		event.preventDefault();
 
-		for (const [_, { isValid }] of Object.entries(formState)) {
-			if (isValid === "invalid" || isValid === "idle") return;
+		if (
+			isFirstNameInputValid.value === "valid" ||
+			isLastNameInputValid.value === "valid" ||
+			isEmailInputValid.value === "valid" ||
+			isPasswordInputValid.value === "valid"
+		) {
+			isFormValid.value = "valid";
+		} else {
+			isFormValid.value = "invalid";
 		}
 
+		if (isFormValid.value === "invalid") return;
+
 		try {
-		} catch (error) {}
+			isFormSubmitting.value = "submitting";
+
+			await createUser({
+				firstName: firstNameInputValue.value,
+				lastName: lastNameInputValue.value,
+				email: emailInputValue.value,
+				password: passwordInputValue.value
+			});
+
+			isFormSubmitting.value = "submitted";
+			formSuccessMessage.value = `Data successfully submitted.`;
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error("Error message:", error.message);
+				formErrorMessage.value = error.message;
+			} else {
+				console.error("Unexpected error:", error);
+			}
+
+			isFormSubmitting.value = "unsubmitted";
+		}
 	};
 
 	const firstNameInputFieldClasses = computed(() => ({
@@ -211,9 +243,13 @@
 					{{ passwordInputErrorMessage }}
 				</p>
 			</Input>
-			<Button :disabled="!isFormValid" classes="sign-up-form__button" type="submit">
+			<Button :disabled="isFormValid === 'invalid'" classes="sign-up-form__button" type="submit">
 				<p
-					v-if="isFormSubmitting === 'idle' || isFormSubmitting === 'submitted'"
+					v-if="
+						isFormSubmitting === 'idle' ||
+						isFormSubmitting === 'submitted' ||
+						isFormSubmitting === 'unsubmitted'
+					"
 					class="sign-up-form__button-text"
 				>
 					Claim your free trial
@@ -223,6 +259,18 @@
 					<Spinner />
 				</div>
 			</Button>
+			<p
+				v-if="formErrorMessage || isFormValid === 'invalid'"
+				class="sign-up-form__form-error-message"
+			>
+				{{ formErrorMessage }}
+			</p>
+			<p
+				v-if="formSuccessMessage || isFormValid === 'valid'"
+				class="sign-up-form__form-success-message"
+			>
+				{{ formSuccessMessage }}
+			</p>
 		</div>
 		<small class="sign-up-form__agreement"
 			>By clicking the button, you are agreeing to our
@@ -320,5 +368,23 @@
 		font-size: 1.1rem;
 		text-align: right;
 		color: var(--pink-glamour);
+	}
+
+	.sign-up-form__form-error-message {
+		text-align: right;
+		font-family: var(--font-family), sans-serif;
+		font-style: italic;
+		font-weight: 500;
+		font-size: 1.1rem;
+		color: var(--pink-glamour);
+	}
+
+	.sign-up-form__form-success-message {
+		text-align: right;
+		font-family: var(--font-family), sans-serif;
+		font-style: italic;
+		font-weight: 500;
+		font-size: 1.1rem;
+		color: var(--dark-shamrock);
 	}
 </style>
