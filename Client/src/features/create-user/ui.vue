@@ -4,14 +4,15 @@
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
 	import { Icon } from "@shared/ui/icon";
+	import { Spinner } from "@shared/ui/spinner";
 
+	import { formInitialState, type FormState } from "./model/store";
 	import {
 		validateEmailInput,
 		validateFirstNameInput,
 		validateLastNameInput,
 		validatePasswordInput
-	} from "./model";
-	import { Spinner } from "@shared/ui/spinner";
+	} from "./model/validation";
 
 	type Props = {
 		classes?: string;
@@ -20,50 +21,6 @@
 	const props = withDefaults(defineProps<Props>(), {
 		classes: ""
 	});
-
-	type FormInputState = {
-		value: string;
-		isValid: "invalid" | "valid" | "idle";
-		errorMessage: string | null;
-	};
-
-	type FormState = {
-		firstNameInput: FormInputState;
-		lastNameInput: FormInputState;
-		emailInput: FormInputState;
-		passwordInput: FormInputState;
-		form: {
-			isValid: "invalid" | "valid" | "idle";
-			isSubmitting: "submitting" | "submitted" | "idle";
-		};
-	};
-
-	const formInitialState: FormState = {
-		firstNameInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		lastNameInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		emailInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		passwordInput: {
-			value: "",
-			isValid: "idle",
-			errorMessage: null
-		},
-		form: {
-			isSubmitting: "idle",
-			isValid: "idle"
-		}
-	};
 
 	const formState = reactive<FormState>(formInitialState);
 
