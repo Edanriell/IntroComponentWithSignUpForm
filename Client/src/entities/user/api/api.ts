@@ -14,7 +14,7 @@ export const createUser = async ({
 	password
 }: CreateUserParameters) => {
 	try {
-		const response = await postData("endpoint", {
+		const response = await postData("/api/users/new", {
 			FirstName: firstName,
 			LastName: lastName,
 			Email: email,

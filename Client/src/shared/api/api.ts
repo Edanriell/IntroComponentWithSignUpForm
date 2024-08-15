@@ -1,5 +1,7 @@
+import { apiUrl } from "@shared/config";
+
 export const postData = (endpoint: string, body: unknown) =>
-	fetch(endpoint, {
+	fetch(apiUrl + endpoint, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json"
