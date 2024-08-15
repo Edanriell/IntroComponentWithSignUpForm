@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-	import { computed, reactive, toRef } from "vue";
+	import { reactive, toRef } from "vue";
 
 	import { createUser } from "@entities/user/api";
 
@@ -8,8 +8,10 @@
 	import { Icon } from "@shared/ui/icon";
 	import { Spinner } from "@shared/ui/spinner";
 
-	import { formInitialState, type FormState } from "./model/store";
+	import { formInitialState, type FormInputState, type FormState } from "./model/store";
 	import {
+		clearFormSubmissionResultMessages,
+		isWholeFormValid,
 		validateEmailInput,
 		validateFirstNameInput,
 		validateLastNameInput,
@@ -26,99 +28,63 @@
 
 	const formState = reactive<FormState>(formInitialState);
 
-	const firstNameInputValue = toRef(formState.firstNameInput, "value");
-	const lastNameInputValue = toRef(formState.lastNameInput, "value");
-	const emailInputValue = toRef(formState.emailInput, "value");
-	const passwordInputValue = toRef(formState.passwordInput, "value");
-
-	const isFirstNameInputValid = toRef(formState.firstNameInput, "isValid");
-	const isLastNameInputValid = toRef(formState.lastNameInput, "isValid");
-	const isEmailInputValid = toRef(formState.emailInput, "isValid");
-	const isPasswordInputValid = toRef(formState.passwordInput, "isValid");
-
-	const firstNameInputErrorMessage = toRef(formState.firstNameInput, "errorMessage");
-	const lastNameInputErrorMessage = toRef(formState.lastNameInput, "errorMessage");
-	const emailInputErrorMessage = toRef(formState.emailInput, "errorMessage");
-	const passwordInputErrorMessage = toRef(formState.passwordInput, "errorMessage");
-
-	const isFormSubmitting = toRef(formState.form, "isSubmitting");
-	const isFormValid = toRef(formState.form, "isValid");
-	const formErrorMessage = toRef(formState.form, "errorMessage");
-	const formSuccessMessage = toRef(formState.form, "successMessage");
-
-	const handleFirstNameInputChange = (event: Event) => {
-		firstNameInputValue.value = (event.target as HTMLInputElement).value;
-		validateFirstNameInput({
-			value: firstNameInputValue.value,
-			isValid: isFirstNameInputValid,
-			errorMessage: firstNameInputErrorMessage
-		});
+	const createInputFieldRefs = <T extends FormInputState>(field: T) => {
+		return {
+			value: toRef(field, "value"),
+			isValid: toRef(field, "isValid"),
+			errorMessage: toRef(field, "errorMessage")
+		};
 	};
 
-	const handleLastNameInputChange = (event: Event) => {
-		lastNameInputValue.value = (event.target as HTMLInputElement).value;
-		validateLastNameInput({
-			value: lastNameInputValue.value,
-			isValid: isLastNameInputValid,
-			errorMessage: lastNameInputErrorMessage
-		});
+	const firstName = createInputFieldRefs<typeof formState.firstNameInput>(formState.firstNameInput);
+	const lastName = createInputFieldRefs<typeof formState.lastNameInput>(formState.lastNameInput);
+	const email = createInputFieldRefs<typeof formState.emailInput>(formState.emailInput);
+	const password = createInputFieldRefs<typeof formState.passwordInput>(formState.passwordInput);
+	const form = {
+		isSubmitting: toRef(formState.form, "isSubmitting"),
+		isValid: toRef(formState.form, "isValid"),
+		errorMessage: toRef(formState.form, "errorMessage"),
+		successMessage: toRef(formState.form, "successMessage")
 	};
 
-	const handleEmailInputChange = (event: Event) => {
-		emailInputValue.value = (event.target as HTMLInputElement).value;
-		validateEmailInput({
-			value: emailInputValue.value,
-			isValid: isEmailInputValid,
-			errorMessage: emailInputErrorMessage
-		});
-	};
+	const handleCreateUserFormInputChange = (
+		field: { value: any; isValid: any; errorMessage: any },
+		validator: Function,
+		event: Event
+	) => {
+		field.value.value = (event.target as HTMLInputElement).value;
 
-	const handlePasswordInputChange = (event: Event) => {
-		passwordInputValue.value = (event.target as HTMLInputElement).value;
-		validatePasswordInput({
-			value: passwordInputValue.value,
-			isValid: isPasswordInputValid,
-			errorMessage: passwordInputErrorMessage
+		validator({
+			value: field.value.value,
+			isValid: field.isValid,
+			errorMessage: field.errorMessage
 		});
 	};
 
 	const handleCreateUserFormSubmit = async (event: Event) => {
 		event.preventDefault();
 
-		if (
-			isFirstNameInputValid.value === "valid" ||
-			isLastNameInputValid.value === "valid" ||
-			isEmailInputValid.value === "valid" ||
-			isPasswordInputValid.value === "valid"
-		) {
-			isFormValid.value = "valid";
-		} else {
-			isFormValid.value = "invalid";
-		}
-
-		if (isFormValid.value === "invalid") return;
-
-		formErrorMessage.value = null;
-		formSuccessMessage.value = null;
+		if (isWholeFormValid({ form, firstName, lastName, email, password })) return;
+		clearFormSubmissionResultMessages(form);
 
 		try {
-			isFormSubmitting.value = "submitting";
+			form.isSubmitting.value = "submitting";
 
 			await createUser({
-				firstName: firstNameInputValue.value,
-				lastName: lastNameInputValue.value,
-				email: emailInputValue.value,
-				password: passwordInputValue.value
+				firstName: firstName.value.value,
+				lastName: lastName.value.value,
+				email: email.value.value,
+				password: password.value.value
 			});
 
-			isFormSubmitting.value = "submitted";
-			formSuccessMessage.value = "Data sent successfully.";
+			form.isSubmitting.value = "submitted";
+			form.successMessage.value = "Data sent successfully.";
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error("Error message:", error.message);
 
 				const splitMessage = error.message.split('Message: "');
-				formErrorMessage.value =
+				form.errorMessage.value =
 					splitMessage.length > 1
 						? splitMessage[1].replace(/"$/, "")
 						: "An unexpected error occurred.";
@@ -126,160 +92,155 @@
 				console.error("Unexpected error:", error);
 			}
 
-			isFormSubmitting.value = "unsubmitted";
+			form.isSubmitting.value = "unsubmitted";
 		}
 	};
 
-	const firstNameInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isFirstNameInputValid.value === "invalid",
-		"sign-up-form__field": true
-	}));
-	const lastNameInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isLastNameInputValid.value === "invalid",
-		"sign-up-form__field": true
-	}));
-	const emailInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isEmailInputValid.value === "invalid",
-		"sign-up-form__field": true
-	}));
-	const passwordInputFieldClasses = computed(() => ({
-		"sign-up-form__field-error": isPasswordInputValid.value === "invalid",
-		"sign-up-form__field": true
-	}));
+	const formInputClasses = (isValid: any) => {
+		return () => {
+			return {
+				"input-error": isValid === "invalid",
+				input: true
+			};
+		};
+	};
 
-	const firstNameInputClasses = computed(() => ({
-		"input-error": isFirstNameInputValid.value === "invalid",
-		input: true
-	}));
-	const lastNameInputClasses = computed(() => ({
-		"input-error": isLastNameInputValid.value === "invalid",
-		input: true
-	}));
-	const emailInputClasses = computed(() => ({
-		"input-error": isEmailInputValid.value === "invalid",
-		input: true
-	}));
-	const passwordInputClasses = computed(() => ({
-		"input-error": isPasswordInputValid.value === "invalid",
-		input: true
-	}));
+	const formFieldClasses = (isValid: any) => {
+		return () => {
+			return {
+				"sign-up-form__field-error": isValid === "invalid",
+				"sign-up-form__field": true
+			};
+		};
+	};
 </script>
 
 <template>
 	<form :class="props.classes + ' sign-up-form'" method="POST" @submit="handleCreateUserFormSubmit">
 		<div class="sign-up-form__content">
 			<Input
-				:classes="firstNameInputClasses"
-				:field-classes="firstNameInputFieldClasses"
+				:classes="formInputClasses(firstName.isValid.value)()"
+				:field-classes="formFieldClasses(firstName.isValid.value)()"
 				description="Name"
 				name="name"
 				placeholder="First Name"
 				type="text"
-				@change="handleFirstNameInputChange"
+				@input="
+					(event) => handleCreateUserFormInputChange(firstName, validateFirstNameInput, event)
+				"
 			>
 				<Icon
-					v-if="isFirstNameInputValid === 'invalid'"
+					v-if="firstName.isValid.value === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isFirstNameInputValid === 'invalid' && firstNameInputErrorMessage!.length > 1"
+					v-if="firstName.isValid.value === 'invalid' && firstName.errorMessage.value!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ firstNameInputErrorMessage }}
+					{{ firstName.errorMessage }}
 				</p>
 			</Input>
 			<Input
-				:classes="lastNameInputClasses"
-				:field-classes="lastNameInputFieldClasses"
+				:classes="formInputClasses(lastName.isValid.value)()"
+				:field-classes="formFieldClasses(lastName.isValid.value)()"
 				description="Last Name"
 				name="last-name"
 				placeholder="Last Name"
 				type="text"
-				@change="handleLastNameInputChange"
+				@change="(event) => handleCreateUserFormInputChange(lastName, validateLastNameInput, event)"
 			>
 				<Icon
-					v-if="isLastNameInputValid === 'invalid'"
+					v-if="lastName.isValid.value === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isLastNameInputValid === 'invalid' && lastNameInputErrorMessage!.length > 1"
+					v-if="lastName.isValid.value === 'invalid' && lastName.errorMessage.value!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ lastNameInputErrorMessage }}
+					{{ lastName.errorMessage }}
 				</p>
 			</Input>
 			<Input
-				:classes="emailInputClasses"
-				:field-classes="emailInputFieldClasses"
+				:classes="formInputClasses(email.isValid.value)()"
+				:field-classes="formFieldClasses(email.isValid.value)()"
 				description="Email Address"
 				name="email-address"
 				placeholder="Email Address"
 				type="email"
-				@change="handleEmailInputChange"
+				@change="(event) => handleCreateUserFormInputChange(email, validateEmailInput, event)"
 			>
 				<Icon
-					v-if="isEmailInputValid === 'invalid'"
+					v-if="email.isValid.value === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isEmailInputValid === 'invalid' && emailInputErrorMessage!.length > 1"
+					v-if="email.isValid.value === 'invalid' && email.errorMessage.value!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ emailInputErrorMessage }}
+					{{ email.errorMessage }}
 				</p>
 			</Input>
 			<Input
-				:classes="passwordInputClasses"
-				:field-classes="passwordInputFieldClasses"
+				:classes="formInputClasses(password.isValid.value)()"
+				:field-classes="formFieldClasses(password.isValid.value)()"
 				description="Password"
 				name="password"
 				placeholder="Password"
 				type="password"
-				@change="handlePasswordInputChange"
+				@change="(event) => handleCreateUserFormInputChange(password, validatePasswordInput, event)"
 			>
 				<Icon
-					v-if="isPasswordInputValid === 'invalid'"
+					v-if="password.isValid.value === 'invalid'"
 					classes="sign-up-form__error-icon"
 					icon-type="error"
 				/>
 				<p
-					v-if="isPasswordInputValid === 'invalid' && passwordInputErrorMessage!.length > 1"
+					v-if="password.isValid.value === 'invalid' && password.errorMessage.value!.length > 1"
 					class="sign-up-form__error-message"
 				>
-					{{ passwordInputErrorMessage }}
+					{{ password.errorMessage }}
 				</p>
 			</Input>
-			<Button :disabled="isFormValid === 'invalid'" classes="sign-up-form__button" type="submit">
+			<Button
+				:disabled="form.isValid.value === 'invalid'"
+				classes="sign-up-form__button"
+				type="submit"
+			>
 				<p
 					v-if="
-						isFormSubmitting === 'idle' ||
-						isFormSubmitting === 'submitted' ||
-						isFormSubmitting === 'unsubmitted'
+						form.isSubmitting.value === 'idle' ||
+						form.isSubmitting.value === 'submitted' ||
+						form.isSubmitting.value === 'unsubmitted'
 					"
 					class="sign-up-form__button-text"
 				>
 					Claim your free trial
 				</p>
-				<div v-else-if="isFormSubmitting === 'submitting'" class="sign-up-form__button-sending">
+				<div
+					v-else-if="form.isSubmitting.value === 'submitting'"
+					class="sign-up-form__button-sending"
+				>
 					<p class="sign-up-form__button-text">Sending data</p>
 					<Spinner />
 				</div>
 			</Button>
-			<p
-				v-if="formErrorMessage || isFormValid === 'invalid'"
-				class="sign-up-form__form-error-message"
-			>
-				{{ formErrorMessage }}
-			</p>
-			<p
-				v-if="formSuccessMessage || isFormValid === 'valid'"
-				class="sign-up-form__form-success-message"
-			>
-				{{ formSuccessMessage }}
-			</p>
+			<div>
+				<p
+					v-if="form.errorMessage || form.isValid.value === 'invalid'"
+					class="sign-up-form__form-error-message"
+				>
+					{{ form.errorMessage }}
+				</p>
+				<p
+					v-if="form.successMessage || form.isValid.value === 'valid'"
+					class="sign-up-form__form-success-message"
+				>
+					{{ form.successMessage }}
+				</p>
+			</div>
 		</div>
 		<small class="sign-up-form__agreement"
 			>By clicking the button, you are agreeing to our

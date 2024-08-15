@@ -96,3 +96,34 @@ export const validatePasswordInput = ({
 	isValid.value = "valid";
 	errorMessage.value = null;
 };
+
+type IsWholeFormValidParameters = {
+	form: any;
+	firstName: any;
+	lastName: any;
+	email: any;
+	password: any;
+};
+
+export const isWholeFormValid = ({
+	form,
+	firstName,
+	lastName,
+	email,
+	password
+}: IsWholeFormValidParameters) => {
+	form.isValid.value =
+		firstName.isValid.value === "valid" &&
+		lastName.isValid.value === "valid" &&
+		email.isValid.value === "valid" &&
+		password.isValid.value === "valid"
+			? "valid"
+			: "invalid";
+
+	return form.isValid.value === "invalid";
+};
+
+export const clearFormSubmissionResultMessages = (form: any) => {
+	form.errorMessage.value = null;
+	form.successMessage.value = null;
+};
