@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 	import { computed, reactive, toRef } from "vue";
 
+	import { createUser } from "@entities/user/api";
+
 	import { Button } from "@shared/ui/button";
 	import { Input } from "@shared/ui/input";
 	import { Icon } from "@shared/ui/icon";
@@ -13,7 +15,6 @@
 		validateLastNameInput,
 		validatePasswordInput
 	} from "./model/validation";
-	import { createUser } from "@entities/user/api";
 
 	type Props = {
 		classes?: string;
@@ -97,6 +98,9 @@
 
 		if (isFormValid.value === "invalid") return;
 
+		formErrorMessage.value = null;
+		formSuccessMessage.value = null;
+
 		try {
 			isFormSubmitting.value = "submitting";
 
@@ -108,11 +112,16 @@
 			});
 
 			isFormSubmitting.value = "submitted";
-			formSuccessMessage.value = `Data successfully submitted.`;
+			formSuccessMessage.value = "Data sent successfully.";
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error("Error message:", error.message);
-				formErrorMessage.value = error.message;
+
+				const splitMessage = error.message.split('Message: "');
+				formErrorMessage.value =
+					splitMessage.length > 1
+						? splitMessage[1].replace(/"$/, "")
+						: "An unexpected error occurred.";
 			} else {
 				console.error("Unexpected error:", error);
 			}
