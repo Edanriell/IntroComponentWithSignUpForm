@@ -11,9 +11,9 @@
 	import { formInitialState, type FormInputState, type FormState } from "./model/store";
 	import {
 		clearFormSubmissionResultMessages,
-		isWholeFormValid,
 		validateEmailInput,
 		validateFirstNameInput,
+		validateForm,
 		validateLastNameInput,
 		validatePasswordInput
 	} from "./model/validation";
@@ -59,12 +59,15 @@
 			isValid: field.isValid,
 			errorMessage: field.errorMessage
 		});
+
+		validateForm({ form, firstName, lastName, email, password });
 	};
 
 	const handleCreateUserFormSubmit = async (event: Event) => {
 		event.preventDefault();
 
-		if (isWholeFormValid({ form, firstName, lastName, email, password })) return;
+		if (form.isValid.value === "invalid") return;
+
 		clearFormSubmissionResultMessages(form);
 
 		try {
@@ -205,7 +208,7 @@
 				</p>
 			</Input>
 			<Button
-				:disabled="form.isValid.value === 'invalid'"
+				:disabled="form.isValid.value === 'invalid' || form.isValid.value === 'idle'"
 				classes="sign-up-form__button"
 				type="submit"
 			>
