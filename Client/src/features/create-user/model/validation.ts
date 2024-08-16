@@ -105,7 +105,7 @@ type IsWholeFormValidParameters = {
 	password: any;
 };
 
-export const isWholeFormValid = ({
+export const validateForm = ({
 	form,
 	firstName,
 	lastName,
@@ -119,8 +119,6 @@ export const isWholeFormValid = ({
 		password.isValid.value === "valid"
 			? "valid"
 			: "invalid";
-
-	return form.isValid.value === "invalid";
 };
 
 export const clearFormSubmissionResultMessages = (form: any) => {
