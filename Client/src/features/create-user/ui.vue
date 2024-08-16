@@ -230,7 +230,13 @@
 					<Spinner />
 				</div>
 			</Button>
-			<div v-if="form.isValid.value !== 'idle'">
+			<div
+				v-if="
+					form.isValid.value !== 'idle' &&
+					form.isSubmitting.value !== 'idle' &&
+					form.isSubmitting.value !== 'submitting'
+				"
+			>
 				<p
 					v-if="form.errorMessage || form.isValid.value === 'invalid'"
 					class="sign-up-form__form-error-message"
